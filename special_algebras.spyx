@@ -1,0 +1,56 @@
+# special algebras
+
+from ore_algebra import *
+
+R.<x> = ZZ['x']; A.<Dx> = OreAlgebra(R,'Dx')
+(Dx-1).annihilator_of_composition(-x^2)           # Dx + 2x
+L = (Dx + 2*x).annihilator_of_integral()
+L                                                 # Dx^2 + 2xDx
+L.to_S(OreAlgebra(ZZ['n'], 'Sn'))                 # (n^2 + 3n + 2)Sn^2 + 2n
+L.power_series_solutions(10)
+L.annihilator_of_composition(1/x).generalized_series_solutions()
+
+R.<x> = ZZ[]
+p = x^2 + 3*x + 8; q = x^3 - 7*x + 5
+A.<Dx> = OreAlgebra(R)
+L = (p*Dx - p.derivative()).lclm(q*Dx - q.derivative())
+L
+L.polynomial_solutions()
+M = (2*x+3)*Dx^2 + (4*x+5)*Dx + (6*x+7)
+sol = M.polynomial_solutions([1,x,x^2,x^3])
+sol 
+
+map(lambda s: M(s[0]) == s[1]+s[2]*x+s[3]*x^2+s[4]*x^3, sol)
+
+
+# compute the annihilator for c(n) = \sum_{k=0}^n 1/(k!).
+
+R.<n> = ZZ[]; A.<Sn> = OreAlgebra(R)
+inverse_factorials = (n+1) *Sn - 1
+partial_sums = inverse_factorials.annihilator_of_sum()
+partial_sums
+
+L = partial_sums.to_list([1,2], 8)  # return the first 8 values of a sequence given the initial values
+L
+
+N(L(7))
+
+
+# compute the asymptotic expansion of the sequence to estimate the number of terms needed to approximate
+# e to a given number of digits.
+
+digits = 10^5 
+asymp = inverse_factorials.generalized_series_solutions(3)
+target = lambda x: log(abs(asymp[0](RR(x))),10) + digits
+num_terms = ceil(find_root(target, 1, 10^6))
+num_terms
+
+# another method:
+
+e_approx = N(e, 400000)
+P.Q = partial_sums.forward_matrix_bsplit(num_terms)
+u = Matrix([[e_approx], [e_approx]])- P*Matrix([[1],[2]])/Q
+u.change_ring(RealField(20))
+
+
+
