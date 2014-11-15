@@ -1,0 +1,49 @@
+from ore_algebra import *
+
+A = OreAlgebra(ZZ['n'], 'Sn')
+G = A.random_element(2)
+L1, L2 = A.random_element(7), A.random_elemetn(5)
+while L1.gcrd(L2) != 1: L2 = A.random_element(5)
+L1, L2 = L1*G, L2*G
+L1.gcrd(L2) == G.normalize()
+L3, S, T = L1.xgcrd(L2) 
+S*L1 + T*L2 == L3
+LCLM = L1.lclm(L2)
+LCLM % L1 == LCLM % L2 == 0
+LCLM.order() == L1.order() + L2.order() - G.order()
+
+A = OreAlgebra9ZZ['n'], 'Sn')
+L1, L2 = A.random_element(3), A.random_element(2)
+algs = ["improved", "classic", "monic", "subresultant"]
+[L1.gcrd(L2, prs=a) for a in algs]                      # [1,1,1,1]
+
+# use GCRD and LCLM to construct operators with prescribed solutions.
+
+R.<x> = ZZ[]; A.<Dx> = OreAlgebra(R)
+L = (Dx-1).lclm(x*Dx-5)
+L                                                     # (x^2 - 5x)Dx^2 + (-x^2 + 20)Dx + 5x-20
+L(x^5)                                                # apply the operator L
+L(exp(x)).full_simplify()                             # apply the operator L
+
+A.<Qqn> = OreAlgebra(ZZ['q']['qn'])
+var('q','n', 'x')                                     #(q,n,x)
+
+(Qqn^2+Qqn+1)(q^n, action=lambda expr: expr.substitute(n=n+1))  # q^n + q^{n+1} + q^{n+1}
+
+(Qqn^2 + Qqn + 1)(x, action=lambda expr: expr.substitute(x=q*x))   # q^2 x + qx + x
+
+
+A.<Sn> = OreAlgebra(ZZ['n'])
+fib = Sn^2 - Sn - 1
+R.<x0,x1,x2> = ZZ['n']['x0','x1','x2']
+fib.annihilator_of_polynomial(x1^2-x0*x2)                     # Sn+1
+
+
+A.<Sn> = OreAlgebra(ZZ['n'])
+fib = Sn^2 - Sn -1
+L1 = fib.annihilator_of_associate(Sn).symmetric_power(2)
+L2 = fib.annihilator_of_associate(Sn^2).symmetric_product(fib)
+L1.lclm(L2)                                                    #Sn^3 - 2Sn^2-2Sn+1
+
+
+
