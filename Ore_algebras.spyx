@@ -1,0 +1,38 @@
+︠afe7195d-27b6-4283-bdb5-667fa30454a9︠
+from ore_algebra import *
+R.<x> = PolynomialRing(ZZ); A.<Dx> = OreAlgebra(R)
+A          # prints the Ore algebra ZZ[x]<D_x>
+A.random_element()
+Dx*x        # prints xD_x + 1 since [D_x, x] = 1
+B.<Sx> = OreAlgebra(R) 
+B             # prints ZZ[x]<Sx>
+Sx*x          # prints(x+1)Sx since S_n n = (n+1)S_n
+
+# now for q-shift and q-derivations 
+
+R.<x> = PolynomialRing(ZZ['q'])  # the base integral ring of one var includes var q.
+A.<Qx> = OreAlgebra(R, q = 2)    # evaluate q = 2
+Qx * x                           # 2xQx since Q_x x = q x Q_x (this si the q-shift of x)
+
+
+R.<x> = ZZ['x']
+A = OreAlgebra(R, ('X', {x:x+1}, {x:1}))    # implemented user specified commutation rules.
+X = A.gen()
+X*x                                         # (x+1)X + 1
+
+
+# base ring: QQ(x,y,z); y = exp(x) and z = log(x)
+K = ZZ['x', 'y', 'z'].fraction_field()
+x,y,z = K.gens()
+A = OreAlgebra(K, ('D', {}, {x:1, y:y, z: 1/x}))
+D = A.gen()
+D*x, D*y, D*z               # output: (xD + 1, yD+ y, zD + (1/x))
+                            # {} is equivalent to {x:x, y:y, z:z} 
+A = OreAlgebra(K, ('D', {}, {x:1, y:y, z:1/x}), 'Sx')
+D, Sx = A.gens()
+D*x, Sx*x                   # (xD + 1, (x+1)Sx)
+D*y, Sx*y                   # (yD+y,       ySx) 
+D*z, Sx*z                   # (zD + (1/x), zSx) 
+
+
+
