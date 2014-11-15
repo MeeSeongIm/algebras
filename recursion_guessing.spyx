@@ -1,0 +1,17 @@
+from ore_algebra import *
+
+data = [0,1,1,2,3,5,8,13,21,34,55,89]
+L = guess(data, OreAlgebra(ZZ['n'],'Sn'))
+L 
+L(data)
+M = guess(data, OreAlgebra(ZZ['x'], 'Dx'))
+M 
+
+M(x/(1-x-x^2))
+
+data = [(n+1)^10*2^n + 3^n for n in xrange(200)]
+L = guess(data, OreAlgebra(ZZ['n'], 'Sn'), min_order=3, max_degree =5)
+L.order(), L.degree()                  # (2,10)
+
+
+
