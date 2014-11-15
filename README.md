@@ -1,4 +1,8 @@
 algebras
 ========
 
-Various algebra samples.
+Various algebra samples: quantum groups, quantum algebra, etc.  
+
+
+
+
